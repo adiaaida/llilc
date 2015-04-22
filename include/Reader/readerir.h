@@ -25,6 +25,8 @@
 #include "llvm/IR/Verifier.h"
 #include "llvm/IR/CFG.h"
 #include "llvm/IR/CallSite.h"
+#include "llvm/IR/DIBuilder.h"
+#include "llvm/IR/DebugInfoMetadata.h"
 #include "reader.h"
 #include "abi.h"
 #include "abisignature.h"
@@ -558,6 +560,12 @@ public:
 
   EHRegion *rgnAllocateRegion() override;
   EHRegionList *rgnAllocateRegionList() override;
+  void setDebugLocation(uint32_t CurrOffset, uint32_t IsCall) override;
+  void pushDebugScope(llvm::Function *F);
+  void popDebugScope() override;
+  llvm::DISubroutineType *createFunctionType(llvm::Function *F,
+                                             llvm::DIFile *Unit);
+  llvm::DIType *convertType(llvm::Type *Ty);
 
   //
   // REQUIRED Flow and Region Graph Manipulation Routines
@@ -1514,6 +1522,7 @@ private:
   // where they should be inserted (the gen- methods do not take explicit
   // insertion point parameters).
   llvm::IRBuilder<> *LLVMBuilder;
+  llvm::DIBuilder *DBuilder;
   std::map<CORINFO_CLASS_HANDLE, llvm::Type *> *ClassTypeMap;
   std::map<llvm::Type *, CORINFO_CLASS_HANDLE> *ReverseClassTypeMap;
   std::map<CORINFO_CLASS_HANDLE, llvm::Type *> *BoxedTypeMap;

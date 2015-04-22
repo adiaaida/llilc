@@ -10,6 +10,7 @@ set(LLVM_LINK_COMPONENTS
   Analysis
   CodeGen
   Core
+  DebugInfoDWARF
   ExecutionEngine
   IPO
   IRReader
@@ -63,6 +64,7 @@ add_llilcjit_library(
   SHARED
   jitpch.cpp
   LLILCJit.cpp
+  LLILCJitEventListener.cpp
   EEMemoryManager.cpp
   jitoptions.cpp
   utility.cpp

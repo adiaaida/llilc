@@ -2981,6 +2981,8 @@ public:
 
   virtual EHRegion *rgnAllocateRegion() = 0;
   virtual EHRegionList *rgnAllocateRegionList() = 0;
+  virtual void setDebugLocation(uint32_t CurrOffset, uint32_t IsCall) = 0;
+  virtual void popDebugScope() = 0;
 
   //
   // REQUIRED Flow and Region Graph Manipulation Routines

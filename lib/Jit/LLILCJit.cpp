@@ -18,6 +18,8 @@
 #include "jitpch.h"
 #include "LLILCJit.h"
 #include "jitoptions.h"
+#include "LLILCJitEventListener.h"
+#include "options.h"
 #include "readerir.h"
 #include "abi.h"
 #include "EEMemoryManager.h"
@@ -201,6 +203,11 @@ CorJitResult LLILCJit::compileMethod(ICorJitInfo *JitInfo,
   EEMemoryManager MM(&Context);
   LoadLayerT Loader;
   CompileLayerT Compiler(Loader, orc::SimpleCompiler(*TM));
+
+  // Attach the event listener
+  Context.EE->RegisterJITEventListener(
+      LLILCJitEventListener::createLLILCJitEventListener(
+          new LLILCJitEventWrapper(&Context)));
 
   // Now jit the method.
   CorJitResult Result = CORJIT_INTERNALERROR;
