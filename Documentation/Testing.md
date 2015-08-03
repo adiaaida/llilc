@@ -153,3 +153,37 @@ Result \<DIFF_RESULT_PATH\> could be kept as last-known-good summary result.
 
 Step 6.If llilc_checkpass result is 1, send out failure notice to branch owner.
 Branch owner should analyze the case and bring relevant developer for fixing.
+
+## Testing Changes in the Lab
+
+LLILC and LLVM changes can be tested in the lab without submitting a pull request.
+
+Step 1. Go to the [LLILC PR job](http://dotnet-ci.cloudapp.net/view/dotnet_llilc/job/dotnet_llilc_prtest/)
+in the lab.
+Step 2. Click on “Build With Parameters” on the left menu. You must be logged in to build a private build.
+Step 3. Update the parameters with the correct LLVMFork/Branch and LLILCFork/Branch names for the branch
+you would like to test. The two fork parameters refer to the usernames of the github forks for LLVM and LLILC.
+They default to Microsoft for LLVMFork and dotnet for LLILCFork. The branch parameters are the specific
+branches in those forks, and default to MS for LLVM and $sha1, the hash for a PR test, for LLILC. To get a
+build of the currently checked in LLILC and LLVM sources, one would use the following parameters:
+
+LLVMFork: Microsoft
+LLVMBranch: MS
+LLILCFork: dotnet
+LLILCBranch: master
+
+To test the EH branch, one would use:
+
+LLVMFork: Microsoft
+LLVMBranch: MS
+LLILCFork: dotnet
+LLILCBranch: EH
+
+To test changes in the TestMe branch in one`s own LLILC repository, with no corresponding LLVM changes:
+
+LLVMFork: Microsoft
+LLVMBranch: MS
+LLILCFork: <github-username>
+LLILCBranch: TestMe
+
+Step 4. Click build. This will run the full set of legs that are run for PR tests.
